@@ -40,7 +40,7 @@ def article():
     print(filepath)
     with open(filepath) as fp:
         myths = [v.replace(prefix_q, '').strip() for v in fp if v.strip() and v.startswith(prefix_q)]
-        
+
     # extract article text
     g = Goose()
     article = g.extract(url=url)
@@ -56,7 +56,7 @@ def article():
     # testing with 3rd sentence in article
     score = np.sum(article_encode[3] * doc_vecs, axis=1)
     topk_idx = np.argsort(score)[::-1][:topk]
-    result = questions[topk_idx[0]]
+    result = myths[topk_idx[0]]
     return jsonify({'message': result})
 
 
