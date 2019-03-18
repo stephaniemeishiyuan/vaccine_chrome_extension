@@ -49,7 +49,7 @@ function get_article(){
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     var url = tabs[0].url;
     request({
-      url:'http://0.0.0.0:8001/article',
+      url:'http://127.0.0.1:5000/article',
       method: 'POST',
       json: url,
   }, function(err, res, body){

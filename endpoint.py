@@ -40,8 +40,6 @@ def article():
     print(filepath)
     with open(filepath) as fp:
         myths = [v.replace(prefix_q, '').strip() for v in fp if v.strip() and v.startswith(prefix_q)]
-    with BertClient(port=5555, port_out=5556) as bc:
-        doc_vecs = bc.encode(myths)
 
     # extract article text
     g = Goose()
@@ -52,11 +50,12 @@ def article():
     # encode sentences
     with BertClient(port=5555, port_out=5556) as bc:
         article_encode = bc.encode(sentences)
+        doc_vecs = bc.encode(myths)
 
     # testing with 3rd sentence in article
     score = np.sum(article_encode[3] * doc_vecs, axis=1)
     topk_idx = np.argsort(score)[::-1][:topk]
-    result = questions[topk_idx[0]]
+    result = myths[topk_idx[0]]
     return jsonify({'message': result})
 
 
