@@ -1,6 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 //<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 document.getElementById("btn-chat").addEventListener("click", check);
+document.getElementById("check-article").addEventListener("click", get_article);
 
 //test to debug
 
@@ -13,12 +14,16 @@ function check_test(){
 
 const request = require('request');
 
+//make json object to populate the request
 var test = {
     "id": 123,
     "is_tokenized": false
 };
+
 //test["texts"] = [document.getElementById('input_text').value];
 //test["texts"] = [document.getElementById("input_text").value];
+
+//main function to check
 function check(){
 
   //test whether input is null
@@ -38,7 +43,21 @@ function check(){
     });
 });
 }
+//function to get article url
 
+function get_article(){
+  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+    var url = tabs[0].url;
+    request({
+      url:'http://0.0.0.0:8001/article',
+      method: 'POST',
+      json: url,
+  }, function(err, res, body){
+      document.getElementById('output_block').value = body.message
+    });
+});
+}
+//function make a call to the app server - written in endpoint.py
 function calculate(result){
   // ajax the JSON to the server
   //$.post("receiver", cars, function(){});
@@ -47,7 +66,7 @@ function calculate(result){
     method: 'POST',
     json: result,
 }, function(err, res, body){
-  document.getElementById('output_block').value = body.message
+  document.getElementById('output_block').value = body.message //populaye the output block
   });
 }
 
