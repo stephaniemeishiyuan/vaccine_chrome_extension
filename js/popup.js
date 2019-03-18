@@ -1,5 +1,6 @@
 //<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 document.getElementById("btn-chat").addEventListener("click", check);
+document.getElementById("check-article").addEventListener("click", get_article);
 
 //test to debug
 
@@ -41,7 +42,20 @@ function check(){
     });
 });
 }
+//function to get article url
 
+function get_article(){
+  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
+    var url = tabs[0].url;
+    request({
+      url:'http://127.0.0.1:5000/article',
+      method: 'POST',
+      json: url,
+  }, function(err, res, body){
+      document.getElementById('output_block').value = body.message
+    });
+});
+}
 //function make a call to the app server - written in endpoint.py
 function calculate(result){
   // ajax the JSON to the server
