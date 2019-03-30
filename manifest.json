@@ -9,5 +9,23 @@
    "default_popup": "popup.html"
   },
 
-  "permissions": ["activeTab"]
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["js/content.js"]
+    }
+  ],
+
+  "permissions": [
+    "http://*/*",
+    "https://*/*",
+    "contextMenus",
+    "activeTab"
+  ]
+
 }
